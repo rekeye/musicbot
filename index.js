@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { Client, GuildMember } = require("discord.js");
 const { Player, QueryType } = require("discord-player");
-const { ytdl } = require("ytdl-core");
+const ytdl = require("ytdl-core");
 
 // Client setup
 const client = new Client({
