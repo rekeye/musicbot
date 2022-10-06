@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { Client, GuildMember } = require("discord.js");
 const { Player, QueryType } = require("discord-player");
+const { ytdl } = require("ytdl-core");
 
 // Client setup
 const client = new Client({
@@ -95,6 +96,14 @@ client.on("interactionCreate", async (interaction) => {
 
     const queue = await player.createQueue(interaction.guild, {
       metadata: interaction.channel,
+      async onBeforeCreateStream(track, source, _queue) {
+        if (source === "youtube")
+          return ytdl(track.url, {
+            filter: "audioonly",
+            quality: "highestaudio",
+            highWaterMark: 1 << 25,
+          });
+      },
     });
 
     try {
