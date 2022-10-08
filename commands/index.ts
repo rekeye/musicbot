@@ -4,6 +4,9 @@ export enum commandNames {
   stop = "stop",
   loop = "loop",
   loopTrack = "looptrack",
+  nightcore = "nightcore",
+  bassboost = "bassboost",
+  clearFilters = "clearfilters",
 }
 
 export const commands = [
@@ -34,5 +37,17 @@ export const commands = [
   {
     name: commandNames.loopTrack,
     description: "Loops the currently playing track",
+  },
+  {
+    name: commandNames.nightcore,
+    description: "Enables a nightcore audio filter",
+  },
+  {
+    name: commandNames.bassboost,
+    description: "Enables a bassboost audio filter",
+  },
+  {
+    name: commandNames.clearFilters,
+    description: "Disables all filters",
   },
 ];

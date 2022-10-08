@@ -1,4 +1,4 @@
-import { Player, QueryType } from "discord-player";
+import { AudioFilters, Player, QueryType, QueueFilters } from "discord-player";
 import ytdl from "ytdl-core";
 import { commandNames } from "..";
 
@@ -74,6 +74,41 @@ interactions.set(commandNames.loopTrack, async (interaction: any, player: Player
   queue.setRepeatMode(1);
   return void interaction.followUp({
     content: "✅ | Looped currently playing song",
+  });
+});
+interactions.set(commandNames.nightcore, async (interaction: any, player: Player) => {
+  await interaction.deferReply();
+  const queue = getQueue(interaction, player);
+  if (!queue) return;
+
+  const filters: QueueFilters = { nightcore: true };
+  queue.setFilters(filters);
+
+  return void interaction.followUp({
+    content: "✅ | Enabled nightcore filter",
+  });
+});
+interactions.set(commandNames.bassboost, async (interaction: any, player: Player) => {
+  await interaction.deferReply();
+  const queue = getQueue(interaction, player);
+  if (!queue) return;
+
+  const filters: QueueFilters = { bassboost: true };
+  queue.setFilters(filters);
+
+  return void interaction.followUp({
+    content: "✅ | Enabled bassboost filter",
+  });
+});
+interactions.set(commandNames.clearFilters, async (interaction: any, player: Player) => {
+  await interaction.deferReply();
+  const queue = getQueue(interaction, player);
+  if (!queue) return;
+
+  queue.setFilters({});
+
+  return void interaction.followUp({
+    content: "✅ | Disabled all filters",
   });
 });
 
