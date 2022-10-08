@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "node build/index.js",
-    "build": "tsc .",
+    "build": "tsc index.ts",
     "postinstall": "npm run build",
     "dev": "ts-node index.ts"
   },
