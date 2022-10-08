@@ -2,6 +2,7 @@ require("dotenv").config();
 const { Client, GuildMember } = require("discord.js");
 const { Player, QueryType } = require("discord-player");
 const ytdl = require("ytdl-core");
+const { commands } = require("./commands");
 
 // Client setup
 const client = new Client({
@@ -43,32 +44,7 @@ player.on("queueEnd", (queue) => {
 // Slash commands setup
 client.on("messageCreate", async (message) => {
   if (message.content === "!deploy") {
-    await message.guild.commands.set([
-      {
-        name: "play",
-        description: "Plays a song from youtube",
-        options: [
-          {
-            name: "query",
-            type: 3,
-            description: "The song you want to play",
-            required: true,
-          },
-        ],
-      },
-      {
-        name: "skip",
-        description: "Skip to the current song",
-      },
-      {
-        name: "queue",
-        description: "See the queue",
-      },
-      {
-        name: "stop",
-        description: "Stop the player",
-      },
-    ]);
+    await message.guild.commands.set(commands);
 
     await message.reply("Deployed!");
   }
