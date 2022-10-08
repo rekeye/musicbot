@@ -1,6 +1,7 @@
 import { Client, Message } from "discord.js";
 import { initPlayer } from "./player";
 import { commands } from "./commands";
+import { setupInteractions } from "./commands/interactions";
 
 require("dotenv").config();
 
@@ -25,3 +26,4 @@ client.on("messageCreate", async (message: Message) => {
     await message.reply("Deployed!");
   }
 });
+client.on("interactionCreate", async (interaction) => await setupInteractions(interaction, player));
