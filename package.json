@@ -12,7 +12,10 @@
     "ytdl-core": "^4.11.2"
   },
   "scripts": {
-    "start": "ts-node index.ts"
+    "start": "node build/index.js",
+    "build": "tsc",
+    "postinstall": "npm run build",
+    "dev": "ts-node index.ts"
   },
   "devDependencies": {
     "ts-node": "^10.9.1",
