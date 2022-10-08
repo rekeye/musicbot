@@ -58,4 +58,3 @@ interactions.set(commandNames.stop, async (interaction: any, player: Player) => 
   queue.destroy();
   return void interaction.followUp({ content: "🛑 | Stopped the player!" });
 });
-interactions.set(commandNames.queue, () => {});
