@@ -1,8 +1,10 @@
+import { Client, GuildMember, Message } from "discord.js";
+import { initPlayer } from "./player";
+import { commands } from "./commands";
+import { QueryType } from "discord-player";
+import ytdl from "ytdl-core";
+
 require("dotenv").config();
-const { Client, GuildMember } = require("discord.js");
-const { Player, QueryType } = require("discord-player");
-const ytdl = require("ytdl-core");
-const { commands } = require("./commands");
 
 // Client setup
 const client = new Client({
@@ -11,41 +13,17 @@ const client = new Client({
 
 client.login(process.env.TOKEN);
 
-client.once("ready", () => console.log(`Logged in as ${client.user.tag}`));
+client.once("ready", () => console.log(`Logged in as ${client.user?.tag}`));
 client.on("error", console.error);
 client.on("warn", console.warn);
 
-// Player setup
-const player = new Player(client);
-
-player.on("error", (queue, error) =>
-  console.log(`[${queue.guild.name}] Error emitted from the queue: ${error.message}`)
-);
-player.on("connectionError", (queue, error) =>
-  console.log(`[${queue.guild.name}] Error emitted from the connection: ${error.message}`)
-);
-
-player.on("trackStart", (queue, track) => {
-  queue.metadata.send(`🎶 | Started playing: **${track.title}** in **${queue.connection.channel.name}**!`);
-});
-player.on("trackAdd", (queue, track) => {
-  queue.metadata.send(`🎶 | Track **${track.title}** queued!`);
-});
-player.on("botDisconnect", (queue) => {
-  queue.metadata.send("❌ | I was manually disconnected from the voice channel, clearing queue!");
-});
-player.on("channelEmpty", (queue) => {
-  queue.metadata.send("❌ | Nobody is in the voice channel, leaving...");
-});
-player.on("queueEnd", (queue) => {
-  queue.metadata.send("✅ | Queue finished!");
-});
+// Player initialisation
+const player = initPlayer(client);
 
 // Slash commands setup
-client.on("messageCreate", async (message) => {
+client.on("messageCreate", async (message: Message) => {
   if (message.content === "!deploy") {
-    await message.guild.commands.set(commands);
-
+    await message.guild?.commands.set(commands);
     await message.reply("Deployed!");
   }
 });
@@ -60,7 +38,8 @@ client.on("interactionCreate", async (interaction) => {
   if (interaction.commandName === "play") {
     await interaction.deferReply();
 
-    const query = interaction.options.get("query").value;
+    const query = interaction.options.get("query")?.value as string;
+
     const searchResult = await player
       .search(query, {
         requestedBy: interaction.user,
@@ -69,16 +48,16 @@ client.on("interactionCreate", async (interaction) => {
       .catch(() => {});
     if (!searchResult || !searchResult.tracks.length)
       return void interaction.followUp({ content: "No results were found!" });
+    if (!interaction.guild) return void interaction.followUp({ content: "Something went wrong!" });
 
-    const queue = await player.createQueue(interaction.guild, {
+    const queue = player.createQueue(interaction.guild, {
       metadata: interaction.channel,
-      async onBeforeCreateStream(track, source, _queue) {
-        if (source === "youtube")
-          return ytdl(track.url, {
-            filter: "audioonly",
-            quality: "highestaudio",
-            highWaterMark: 1 << 25,
-          });
+      async onBeforeCreateStream(track, _source, _queue) {
+        return ytdl(track.url, {
+          filter: "audioonly",
+          quality: "highestaudio",
+          highWaterMark: 1 << 25,
+        });
       },
     });
 
