@@ -3,7 +3,7 @@ export enum commandNames {
   skip = "skip",
   stop = "stop",
   loop = "loop",
-  loopTrack = "loopTrack",
+  loopTrack = "looptrack",
 }
 
 export const commands = [
