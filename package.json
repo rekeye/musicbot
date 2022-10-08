@@ -13,7 +13,7 @@
     "ytdl-core": "^4.11.2"
   },
   "scripts": {
-    "start": "node build/index.js",
+    "start": "node index.js",
     "build": "tsc",
     "postinstall": "npm run build",
     "dev": "ts-node index.ts"
