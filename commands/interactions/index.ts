@@ -3,7 +3,7 @@ import { Player } from "discord-player";
 import { interactions } from "./interactionMap";
 
 export const setupInteractions = (client: Client, player: Player) => {
-  client.on("interactionCreate", async (interaction) => {
+  return client.on("interactionCreate", async (interaction) => {
     if (!interaction.isCommand() || !interaction.guildId) return;
 
     if (!(interaction.member instanceof GuildMember) || !interaction.member.voice.channelId) {
@@ -11,7 +11,6 @@ export const setupInteractions = (client: Client, player: Player) => {
     }
 
     const command = interactions.get(interaction.commandName);
-    console.log(command);
     if (command) command(interaction, player);
   });
 };
