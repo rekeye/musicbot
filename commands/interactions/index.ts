@@ -1,6 +1,5 @@
 import { Client, GuildMember } from "discord.js";
-import { Player, QueryType } from "discord-player";
-import ytdl from "ytdl-core";
+import { Player } from "discord-player";
 import { interactions } from "./interactionMap";
 
 export const setupInteractions = (client: Client, player: Player) => {

@@ -43,8 +43,8 @@ interactions.set(commandNames.play, async (interaction: any, player: Player) => 
 });
 interactions.set(commandNames.skip, async (interaction: any, player: Player) => {
   await interaction.deferReply();
-  const queue = player.getQueue(interaction.guildId);
-  if (!queue || !queue.playing) return void interaction.followUp({ content: "❌ | No music is being played!" });
+  const queue = getQueue(interaction, player);
+  if (!queue) return;
   const currentTrack = queue.current;
   const success = queue.skip();
   return void interaction.followUp({
@@ -53,8 +53,26 @@ interactions.set(commandNames.skip, async (interaction: any, player: Player) => 
 });
 interactions.set(commandNames.stop, async (interaction: any, player: Player) => {
   await interaction.deferReply();
-  const queue = player.getQueue(interaction.guildId);
-  if (!queue || !queue.playing) return void interaction.followUp({ content: "❌ | No music is being played!" });
+  const queue = getQueue(interaction, player);
+  if (!queue) return;
   queue.destroy();
   return void interaction.followUp({ content: "🛑 | Stopped the player!" });
 });
+interactions.set(commandNames.loop, async (interaction: any, player: Player) => {
+  await interaction.deferReply();
+  const queue = getQueue(interaction, player);
+  if (!queue) return;
+  queue.setRepeatMode(2);
+});
+interactions.set(commandNames.loopTrack, async (interaction: any, player: Player) => {
+  await interaction.deferReply();
+  const queue = getQueue(interaction, player);
+  if (!queue) return;
+  queue.setRepeatMode(1);
+});
+
+const getQueue = (interaction: any, player: Player) => {
+  const queue = player.getQueue(interaction.guildId);
+  if (!queue || !queue.playing) return void interaction.followUp({ content: "❌ | No music is being played!" });
+  return queue;
+};
