@@ -105,7 +105,10 @@ interactions.set(commandNames.clearFilters, async (interaction: any, player: Pla
   const queue = getQueue(interaction, player);
   if (!queue) return;
 
-  queue.setFilters({});
+  queue.setFilters({
+    nightcore: false,
+    bassboost: false,
+  });
 
   return void interaction.followUp({
     content: "✅ | Disabled all filters",
