@@ -11,6 +11,7 @@ export const setupInteractions = (client: Client, player: Player) => {
     }
 
     const command = interactions.get(interaction.commandName);
+    console.log(command);
     if (command) command(interaction, player);
   });
 };
