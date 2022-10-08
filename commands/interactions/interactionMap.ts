@@ -63,12 +63,18 @@ interactions.set(commandNames.loop, async (interaction: any, player: Player) => 
   const queue = getQueue(interaction, player);
   if (!queue) return;
   queue.setRepeatMode(2);
+  return void interaction.followUp({
+    content: "✅ | Looped currently playing songs",
+  });
 });
 interactions.set(commandNames.loopTrack, async (interaction: any, player: Player) => {
   await interaction.deferReply();
   const queue = getQueue(interaction, player);
   if (!queue) return;
   queue.setRepeatMode(1);
+  return void interaction.followUp({
+    content: "✅ | Looped currently playing song",
+  });
 });
 
 const getQueue = (interaction: any, player: Player) => {
