@@ -1,6 +1,13 @@
+export enum commandNames {
+  play = "play",
+  skip = "skip",
+  queue = "queue",
+  stop = "stop",
+}
+
 export const commands = [
   {
-    name: "play",
+    name: commandNames.play,
     description: "Plays a song from youtube",
     options: [
       {
@@ -12,15 +19,15 @@ export const commands = [
     ],
   },
   {
-    name: "skip",
+    name: commandNames.skip,
     description: "Skip to the current song",
   },
   {
-    name: "queue",
+    name: commandNames.queue,
     description: "See the queue",
   },
   {
-    name: "stop",
+    name: commandNames.stop,
     description: "Stop the player",
   },
 ];
