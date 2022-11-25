@@ -1,5 +1,4 @@
-import { AudioFilters, Player, QueryType, QueueFilters } from "discord-player";
-import ytdl from "ytdl-core";
+import { Player, QueryType, QueueFilters } from "discord-player";
 import { commandNames } from "..";
 
 export const interactions = new Map<string, (interaction: any, player: Player) => void>();
@@ -20,14 +19,12 @@ interactions.set(commandNames.play, async (interaction: any, player: Player) => 
   if (!interaction.guild) return void interaction.followUp({ content: "Something went wrong!" });
 
   const queue = player.createQueue(interaction.guild, {
-    metadata: interaction.channel,
-    async onBeforeCreateStream(track, _source, _queue) {
-      return ytdl(track.url, {
-        filter: "audioonly",
-        quality: "highestaudio",
-        highWaterMark: 1 << 25,
-      });
+    ytdlOptions: {
+      filter: "audioonly",
+      quality: "highestaudio",
+      highWaterMark: 1 << 25,
     },
+    metadata: interaction.channel,
   });
 
   try {
